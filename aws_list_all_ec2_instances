@@ -1,0 +1,7 @@
+#!/bin/bash
+# this script uses jq to parse json results. get it from https://stedolan.github.io/jq/
+for region in `aws ec2 describe-regions --region=eu-central-1 --output text | cut -f3`
+do
+     echo -e "\nListing Instances in region:'$region'..."
+     aws ec2 describe-instances --region $region | jq '.Reservations[] | ( .Instances[] | {state: .State.Name, name: .KeyName, type: .InstanceType, key: .KeyName})'
+done
